@@ -39,7 +39,36 @@ void print_bits(void const * const ptr, size_t const size) {
  * @param result - binary value to store the result
  * @return STATUS_CODE - STATUS_SUCCESS if request okay, STATUS_ERROR if out of bounds request
  */
-// TODO: define get_bit function
+static STATUS_CODE get_bit(const uint8_t* data, uint8_t byte_length, uint8_t bit_offset, bool* result) {
+
+    if (data == NULL) {
+        printf("!!! ERR - Data buffer is empty !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (!byte_length) {
+        printf("!!! ERR - byte_length is zero !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (bit_offset > ((byte_length * BITS_IN_A_BYTE) - 1)) {
+        printf("!!! ERR - bit_offset is out of bound !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (result == NULL) {
+        printf("!!! ERR - result pointer is NULL !!!\n");
+        return STATUS_ERROR;
+    }
+
+    // Get the array index and bit offset
+    uint8_t arr_index = (bit_offset / BITS_IN_A_BYTE);
+    uint8_t bit_index = (bit_offset % BITS_IN_A_BYTE);
+    *result = (data[arr_index] >> bit_index) & 0x01;
+
+    return STATUS_SUCCESS;
+
+}
 
 /**
  * @brief Sets the bit at the given offset to 1.
@@ -50,7 +79,29 @@ void print_bits(void const * const ptr, size_t const size) {
  * @param bit_offset - the offset of the bit to set (0 is lsb)
  * @return STATUS_CODE - STATUS_SUCCESS if request okay, STATUS_ERROR if out of bounds request
  */
-// TODO: define set_bit function
+static STATUS_CODE set_bit(uint8_t* data, uint8_t byte_length, uint8_t bit_offset) {
+
+    if (data == NULL) {
+        printf("!!! ERR - Data buffer is empty !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (!byte_length) {
+        printf("!!! ERR - byte_length is zero !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (bit_offset > ((byte_length * BITS_IN_A_BYTE) - 1)) {
+        printf("!!! ERR - bit_offset is out of bound !!!\n");
+        return STATUS_ERROR;
+    }
+
+    // Get the array index and bit offset
+    uint8_t arr_index = (bit_offset / BITS_IN_A_BYTE);
+    uint8_t bit_index = (bit_offset % BITS_IN_A_BYTE);
+
+    data[arr_index] = (data[arr_index] | (1 << bit_index));
+}
 
 /**
  * @brief Sets the bit at the given offset to 0.
@@ -61,7 +112,30 @@ void print_bits(void const * const ptr, size_t const size) {
  * @param bit_offset - the offset of the bit to clear (0 is lsb)
  * @return STATUS_CODE - STATUS_SUCCESS if request okay, STATUS_ERROR if out of bounds request
  */
-// TODO: define clear_bit function
+static STATUS_CODE clear_bit(uint8_t* data, uint8_t byte_length, uint8_t bit_offset) {
+
+    if (data == NULL) {
+        printf("!!! ERR - Data buffer is empty !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (!byte_length) {
+        printf("!!! ERR - byte_length is zero !!!\n");
+        return STATUS_ERROR;
+    }
+
+    if (bit_offset > ((byte_length * BITS_IN_A_BYTE) - 1 )) {
+        printf("!!! ERR - bit_offset is out of bound !!!\n");
+        return STATUS_ERROR;
+    }
+
+    // Get the array index and bit offset
+    uint8_t arr_index = (bit_offset / BITS_IN_A_BYTE);
+    uint8_t bit_index = (bit_offset % BITS_IN_A_BYTE);
+
+    data[arr_index] = (data[arr_index] & ~(1 << bit_index));
+
+}
 
 void get_bit_test() {
   uint8_t pass = 0;
